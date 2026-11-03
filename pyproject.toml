@@ -1,0 +1,192 @@
+[project]
+name = "helloworld"
+version = "0.1.0"
+description = "Sample website for containers presentation"
+readme = "README.md"
+authors = [
+    { name = "James Mitchell", email = "james.mitchell@maungawhau.net.nz" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "django>=6.1.2",
+    "django-environ>=0.14.0",
+    "granian[pname,uvloop]>=2.8.7",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+# "manage.py" = "helloworld:django_manage"
+
+[build-system]
+requires = ["uv_build>=0.13.4,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.22",
+    "django-types>=0.24.0",
+    "djlint>=1.49.4",
+    "pre-commit>=4.7.0",
+    "pre-commit-uv>=4.4.1",
+    "pytest>=9.2.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.3",
+    "ty>=0.0.96",
+]
+
+[tool.uv]
+constraint-dependencies = ["certifi>=2026.10.19"]
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "migrations",
+]
+
+# Same as Black.
+line-length = 120
+indent-width = 4
+
+# Assume Python 3.14
+target-version = "py314"
+
+extend-include = ["*.ipynb"]
+extend-exclude = ["*.md"]
+
+# --------------------------------------------------------------------------------------------------
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+    # only relevant if you run a script with `python -0`,
+    # which seems unlikely for any of the scripts in this repo
+    "B011",
+    # Leave it to the formatter to split long lines and
+    # the judgement of all of us.
+    "E501",
+    "D100",  # Missing docstring in public module
+    "D211",  # Multi-line docstring summary should start at the second line
+    "D213",  # multi-line-summary-second-line
+    "COM812", # Use `from module import *` instead of `import module`
+    "D203",  # 1 blank line required before class docstring
+    "D104", # Missing docstring in public package
+    "TRY003", # Checks for long exception messages that are not defined in the exception class itself.
+    "EM101", # Checks for the use of string literals in exception constructors.
+    "CPY001", # This repository does not use per-file copyright headers.
+
+
+    # Django-specific exclusions
+    # "ANN403",  # Missing type annotation for self in method
+    "ANN401",  # Dynamically typed expressions (Any) - Required for Django interfaces
+    "INP001",  # Implicit namespace package - tests/ directory intentionally not a package
+    "PLC0415",  # Import should be at top-level - Django manage.py pattern
+    "EXE001",  # Shebang is present but file is not executable - Will be made executable in deployment
+    "ANN002",  # Type annotations for args
+    "ANN003",  # Type annotations for kwargs
+
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Test files use pytest patterns
+"tests/**/*.py" = [
+    "S101",     # Use of assert detected - pytest standard
+    "PLR2004",  # Magic value used in comparison - HTTP status codes/test values are standard
+
+
+    "TC002",    # Move import into type-checking block - Runtime imports needed for fixtures
+    "TC003",    # Move import into type-checking block - Runtime imports needed for fixtures
+    "ARG001",   # Unused function argument - Fixtures require specific signatures
+    "SLF001",   # Private member accessed - Tests intentionally call private members
+
+]
+
+# Django app tests.py files also use pytest patterns
+"*/tests.py" = ["S101", "PLR2004", "PGH003", "ANN", "D", "PLR0913"]
+# Django app tests.py files also use pytest patterns
+"*/tests/*" = ["S101", "PLR2004", "PGH003", "ANN", "D", "PLR0913"]
+"*/tests/**" = ["S101", "PLR2004", "PGH003", "ANN", "D", "PLR0913", "PLR0917", "ISC004", "SLF001"]
+# Django app tests.py files also use pytest patterns
+"conftest.py" = ["S101", "PLR2004", "PGH003", "ANN", "D", "ARG"]
+"*/tests/fixtures.py" = ["S101", "PLR2004", "PGH003", "ANN", "D", "ARG"]
+
+# Django admin files use standard patterns that trigger ClassVar warnings
+"*/admin.py" = ["D101","D102","RUF012"]
+# Django migrations are auto-generated
+"*/migrations/*.py" = ["D101", "RUF012"]
+# Django models Meta classes use standard patterns
+"*/models.py" = ["RUF012", "D105", "D106"]
+"*/forms.py" = ["RUF012", "D105", "D106"]
+# Settings files use star imports by Django convention
+"*/settings.py" = ["F405"]
+"*/conf.py" = ["D101", "D106", "F401", "F405"]
+"*/apps.py" = ["D101", "F405"]
+# Management commands need specific signatures
+"*/management/commands/*.py" = ["ARG002", "TC003", "PGH003"]
+# Factory-boy factories
+"*/factories.py" = ["D", "ANN", "ARG"]
+
+# Specific ruff formatting rules
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+
+[tool.ruff.lint.pylint]
+max-positional-args = 6
+
+# --------------------------------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests", "thrf", "devops"]
+addopts = [
+    "-v",
+    "--strict-markers",
+]
+
+DJANGO_SETTINGS_MODULE = "helloworld.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+[tool.bandit]
+# Configuration for bandit security checking tool
+exclude_dirs = [
+    "templates/",
+    "**/test*.py",
+    "**/tests/",
+    "**/factories.py",
+    "conftest.py",
+]
+
+[tool.djlint]
+profile = "django"
+indent = 4
+max_line_length = 120        # matches ruff
+max_attribute_length = 80
+preserve_blank_lines = true
+use_gitignore = true
+ignore = "H006,H021,H023,H030,H031,T003"              # meta keywords - not relevant for app templates
+
+[tool.djlint.per-file-ignores]
+"templates/components/*.html" = "H006"  # img width/height - cotton components often omit these
+
+[tool.basedpyright]
+typeCheckingMode = "standard"

@@ -1,0 +1,55 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "Django: Runserver",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": [
+        "runserver",
+        "0.0.0.0:${env:APP_HOST_PORT}"
+      ],
+      "django": true,
+      "justMyCode": false,
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Python: Attach debugpy",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "justMyCode": false
+    },
+    {
+      "name": "Django: Management Command",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/helloworld/src/manage.py",
+      "args": ["${input:managementCommand}"],
+      "django": true,
+      "justMyCode": false,
+      "envFile": "${workspaceFolder}/.env",
+      "python": "${workspaceFolder}/helloworld/.venv/bin/python"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "managementCommand",
+      "type": "promptString",
+      "description": "Management command and args (e.g. makemigrations)"
+    }
+  ]
+}
