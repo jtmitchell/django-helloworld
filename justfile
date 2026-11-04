@@ -9,7 +9,7 @@ default:
 # Install python DEV dependancies
 install:
     uv sync
-    uv run pre-commit install --hook-type pre-commit --hook-type prepare-commit-msg
+    uv run pre-commit install --hook-type pre-commit
 
 # uv run a command
 [working-directory: "src"]
@@ -41,6 +41,15 @@ django-admin +options:
 test +options="":
     uv run pytest {{options}}
 
+# Check the code
+[working-directory: "src"]
+lint:
+    uv run ruff check .
+    uv run ruff format --check .
+    uv run ty check .
+    uv run python manage.py check
+
+# Report the current version
 version:
     uv version --short
 

@@ -10,7 +10,6 @@ requires-python = ">=3.14"
 dependencies = [
     "django>=6.1.2",
     "django-environ>=0.14.0",
-    "granian[pname,uvloop]>=2.8.7",
     "python-dotenv>=1.2.4",
 ]
 
@@ -190,3 +189,8 @@ ignore = "H006,H021,H023,H030,H031,T003"              # meta keywords - not rele
 
 [tool.basedpyright]
 typeCheckingMode = "standard"
+
+[tool.ty.rules]
+invalid-method-override = "ignore"
+invalid-attribute-override = "ignore"
+unused-ignore-comment = "ignore"
