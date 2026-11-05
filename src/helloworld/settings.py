@@ -27,7 +27,7 @@ if env_file := find_dotenv():
     env.read_env(env_file, overwrite=True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY", default="django-insecure-change-this-in-production")
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
