@@ -16,6 +16,7 @@ concurrency:
 
 env:
   DJANGO_SETTINGS_MODULE: helloworld.settings
+  SECRET_KEY: aem7ueGh
   DATABASE_URL: sqlite:///db.sqlite3
 
 jobs:
