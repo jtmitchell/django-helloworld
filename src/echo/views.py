@@ -1,28 +1,17 @@
 # Create your views here.
 from typing import TYPE_CHECKING
 
-from django.db import IntegrityError, transaction
-from django.db.models import F
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 
-from . import models
+from .decorators import count_page_view
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
+@count_page_view
+@cache_page(60 * 5)
 def home(request: HttpRequest) -> HttpResponse:
     """Print hello world."""
-    match = request.resolver_match
-    page_name: str = match.view_name if match else request.path
-
-    # Increment the page views
-    try:
-        with transaction.atomic():
-            models.PageViews.objects.get_or_create(page=page_name, defaults={"page": page_name, "views": 0})
-    except IntegrityError:
-        # Multiple attempts to create same record, some will raise the exception
-        pass
-    models.PageViews.objects.filter(page=page_name).update(views=F("views") + 1)
-
     return render(request, "echo/home.html", {})
