@@ -4,11 +4,10 @@ A sample django website for a presentation on using containers with Python devel
 
 # Branch Status
 
-Now the project has an `echo` app with a template and a view, so it can show a **Hello world** page.
-- `just run startapp echo`
+We have added a cache decorator to the view, and that has introduced some complexity.
+- the database counter has to run outside of the cached view, so it is now a decorator function.
 
-The view will also increment a counter in a database, for no reason except to justify adding a database.
-
+We also have a GitHub workflow action to run tests.
 
 # Developer Onboarding
 
@@ -19,7 +18,8 @@ New developers are still expected to handle installation of external tools for t
 - [uv](https://docs.astral.sh/uv/)
 - [just](https://github.com/casey/just)
 - Their preferred code editor
-- A database
+- A database. This can be sqlite, mysql, postgres - anything really
+- A cache. Django will default to a file-based cache
 
 ## Python managed dependancies
 
