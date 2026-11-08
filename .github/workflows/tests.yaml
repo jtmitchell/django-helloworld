@@ -20,7 +20,7 @@ env:
   DB_USER: webapp
   DB_PASSWORD: webapp1234
   DB_NAME: webapp
-  DATABASE_URL: postgres://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
+  DATABASE_URL: postgres://webapp:webapp1234@localhost:5432/webapp
   CACHE_URL: redis://localhost:6379/0
 
 jobs:
