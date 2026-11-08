@@ -17,13 +17,41 @@ concurrency:
 env:
   DJANGO_SETTINGS_MODULE: helloworld.settings
   SECRET_KEY: aem7ueGh
-  DATABASE_URL: sqlite:///db.sqlite3
+  DB_USER: webapp
+  DB_PASSWORD: webapp1234
+  DB_NAME: webapp
+  DATABASE_URL: postgres://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
+  CACHE_URL: redis://localhost:6379/0
 
 jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      db:
+        image: docker.io/library/postgres:18
+        env:
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      cache:
+        image: valkey/valkey:9
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "valkey-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
