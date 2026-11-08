@@ -4,29 +4,22 @@ A sample django website for a presentation on using containers with Python devel
 
 # Branch Status
 
-At this point there is no real code in the project.
+Now the project has an `echo` app with a template and a view, so it can show a **Hello world** page.
+- `just run startapp echo`
 
-We have an "empty" project, where we have run
-- `git init`
-- `uv init`
-- then added Django and some standard development packages, such as `ruff`, `ty`, and `pre-commit`
-- `uv run django-admin startproject src/`
+The view will also increment a counter in a database, for no reason except to justify adding a database.
 
 
 # Developer Onboarding
 
-New developers are expected to handle installation of external tools for their own system.
+New developers are still expected to handle installation of external tools for their own system.
 
 ## External tools
 - [git](https://git-scm.com/)
 - [uv](https://docs.astral.sh/uv/)
 - [just](https://github.com/casey/just)
-- Their preferred code editor, such as
-  - [vscode](https://code.visualstudio.com/)
-  - [pycharm](https://www.jetbrains.com/pycharm/)
-  - [zed](https://zed.dev/)
-  - [neovim](https://neovim.io/)
-  - [helix](https://helix-editor.com/)
+- Their preferred code editor
+- A database
 
 ## Python managed dependancies
 
