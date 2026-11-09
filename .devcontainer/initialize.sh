@@ -26,6 +26,10 @@ if ! grep -q '^DEVSERVER_PORT=' "$env_file"; then
 fi
 
 # Determine the root worktree directory
+sed -i '/^WORKTREES_ROOT=/d' "$env_file"
+main=$(git worktree list --porcelain | sed -n '1s/^worktree //p')
+echo "WORKTREES_ROOT=${WORKTREE_ROOT:-$(dirname "$main")}" >> "$env_file"
+
 sed -i '/^WORKTREE_DIR=/d;/^GIT_COMMON_DIR=/d' "$env_file"
 {
   echo "WORKTREE_DIR=$PWD"

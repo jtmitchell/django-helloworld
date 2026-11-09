@@ -60,6 +60,4 @@ volumes:
   venv:
   pgdata:
   uv-cache:
-    name: shared-uv-cache
   precommit-cache:
-    name: shared-precommit-cache
