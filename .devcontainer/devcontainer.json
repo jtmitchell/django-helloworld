@@ -1,0 +1,94 @@
+{
+  "name": "Hello World app",
+  "initializeCommand": "cp --update=none sample.env .env",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "workspaceFolder": "/workspace",
+  "service": "devcontainer",
+  "remoteUser": "vscode",
+  "forwardPorts": [8000, "mailpit:8025", 5678],
+  "portsAttributes": {
+    "8000": {
+      "label": "Django Dev Server",
+      "onAutoForward": "notify"
+    },
+    "8025": {
+      "label": "Mailpit",
+      "onAutoForward": "notify"
+    },
+    "443": {
+      "label": "HTTPS",
+      "protocol": "https",
+      "onAutoForward": "openBrowser"
+    },
+    "5678": {
+      "label": "debugpy",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "uv venv --clear --no-managed-python ${containerWorkspaceFolder}/.venv && just install",
+  "postStartCommand": "uv sync --locked && uv run pre-commit gc",
+  "mounts": [
+    // "type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
+    // Persist the pre-commit and uv caches across builds
+    "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
+    "source=uv-cache,target=/home/vscode/.cache/uv,type=volume"
+  ],
+  "containerEnv": {
+    "DISPLAY": "dummy"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {
+      "moby": false
+    },
+    "ghcr.io/jsburckhardt/devcontainer-features/just:1": {},
+    "ghcr.io/devcontainer-community/devcontainer-features/jq:1": {},
+    "ghcr.io/nlstn/devcontainer-features/psql:1": {},
+    "ghcr.io/devcontainer-community/devcontainer-features/k9scli.io:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "redhat.vscode-yaml",
+        "skellock.just",
+        "tamasfe.even-better-toml",
+        "typefox.open-collaboration-tools",
+        "yzhang.markdown-all-in-one",
+        "astral-sh.ty",
+        "batisteo.vscode-django",
+        "formulahendry.auto-rename-tag",
+        "monosans.djlint"
+      ],
+      "settings": {
+        "python.languageServer": "None",
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+          }
+        },
+        "files.watcherExclude": {
+          ".venv/**": true,
+          "**/__pycache__/**": true,
+          "**/.ruff_cache/**": true,
+          "**/.pytest_cache/**": true
+        },
+        "basedpyright.disableLanguageServices": true,
+        "python.analysis.typeCheckingMode": "off",
+        "python.terminal.useEnvFile": true,
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
+      }
+    }
+  }
+}
