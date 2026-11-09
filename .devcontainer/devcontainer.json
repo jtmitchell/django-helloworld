@@ -39,15 +39,9 @@
     "DISPLAY": "dummy"
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:4": {
-      "moby": false
-    },
     "ghcr.io/jsburckhardt/devcontainer-features/just:1": {},
-    "ghcr.io/devcontainer-community/devcontainer-features/jq:1": {},
     "ghcr.io/nlstn/devcontainer-features/psql:1": {},
-    "ghcr.io/devcontainer-community/devcontainer-features/k9scli.io:1": {},
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
-    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {},
     "ghcr.io/devcontainers/features/azure-cli:1": {}
   },
   "customizations": {
