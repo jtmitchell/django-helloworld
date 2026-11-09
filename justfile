@@ -33,7 +33,7 @@ migrate +options="":
 
 # Start the django development server
 runserver +options="":
-    just manage runserver {{options}}
+    just manage runserver 0.0.0.0:${DEVSERVER_PORT:-8000} {{options}}
 
 # Run the Django admin command
 django-admin +options:
