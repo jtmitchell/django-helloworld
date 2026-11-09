@@ -3,7 +3,7 @@
 set dotenv-load := true
 
 # Untracked per-developer files copied from the main worktree into new worktrees
-personal_files := ".env .devcontainer/docker-compose.personal.yaml .devcontainer/Dockerfile.personal"
+personal_files := ".env .devcontainer/docker-compose.personal.yml .devcontainer/Dockerfile.personal"
 
 # This list of available targets
 default:
