@@ -2,6 +2,9 @@
 
 set dotenv-load := true
 
+# Untracked per-developer files copied from the main worktree into new worktrees
+personal_files := ".env .devcontainer/docker-compose.personal.yaml .devcontainer/Dockerfile.personal"
+
 # This list of available targets
 default:
     @just --list
@@ -78,6 +81,35 @@ bump_release +options="":
 
 
 # ---- Worktrees and devcontainers (run on the HOST, not in a container) ----
+
+# Copy the personal files from the main worktree to DEST (existing files are kept unless overwrite=true)
+[private]
+_copy-personal dest overwrite="false":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    main=$(git worktree list --porcelain | sed -n '1s/^worktree //p')
+    dest="{{dest}}"
+    if [ "$dest" = "$main" ]; then
+        echo "Destination is the main worktree" >&2; exit 1
+    fi
+    for f in {{personal_files}}; do
+        if [ ! -f "$main/$f" ]; then
+            echo "skip (not in main): $f"; continue
+        fi
+        if [ -e "$dest/$f" ] && [ "{{overwrite}}" != "true" ]; then
+            echo "keep (exists): $f"; continue
+        fi
+        mkdir -p "$(dirname "$dest/$f")"
+        cp -p "$main/$f" "$dest/$f"
+        echo "copied: $f"
+    done
+
+# Refresh the personal files in an existing worktree from the main worktree
+worktree-sync name overwrite="false": _host-only
+    #!/usr/bin/env bash
+    set -euo pipefail
+    path=$(just _worktree-path "{{name}}")
+    just _copy-personal "$path" "{{overwrite}}"
 
 # Refuse to run inside a devcontainer
 [private]
@@ -157,6 +189,7 @@ worktree-add branch base="HEAD" up="true": _host-only
     else
         git worktree add -b "{{branch}}" "$path" "{{base}}"
     fi
+    just _copy-personal "$path"
     if [ "{{up}}" = "true" ]; then
         devcontainer up --workspace-folder "$path" </dev/null
     fi
