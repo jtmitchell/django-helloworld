@@ -1,6 +1,6 @@
 {
   "name": "Hello World app",
-  "initializeCommand": "cp --update=none sample.env .env",
+  "initializeCommand": "test -f .env || cp sample.env .env",
   "dockerComposeFile": [
     "docker-compose.yml"
   ],
