@@ -36,8 +36,11 @@ services:
       dockerfile: .devcontainer/Dockerfile
     init: true
     volumes:
-      - ..:/workspace:cached
+      - "${WORKTREE_DIR:?run the initializeCommand}:${WORKTREE_DIR}"
+      - "${GIT_COMMON_DIR}:${GIT_COMMON_DIR}"
       - venv:/workspace/.venv
+      - uv-cache:/home/vscode/.cache/uv
+      - precommit-cache:/home/vscode/.cache/pre-commit
     depends_on:
       postgres:
         condition: service_healthy # waits for pg_isready to pass
@@ -46,9 +49,17 @@ services:
       mailpit:
         condition: service_started
     command: sleep infinity
+    ports:
+      - "127.0.0.1:${DEVSERVER_PORT:?run the initializeCommand}:8000"
+    environment:
+      INSTANCE_NAME: ${INSTANCE_NAME}
     env_file:
       - "../.env"
 
 volumes:
   venv:
   pgdata:
+  uv-cache:
+    name: shared-uv-cache
+  precommit-cache:
+    name: shared-precommit-cache

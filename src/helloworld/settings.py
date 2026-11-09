@@ -32,8 +32,12 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
+INSTANCE_NAME: str = env.str("INSTANCE_NAME", "dev")
+
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1"])
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
+CSRF_COOKIE_NAME: str = f"csrftoken_{INSTANCE_NAME}"
 
 # Application definition
 
@@ -71,6 +75,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "helloworld.context_processors.instance",
             ],
         },
     },
@@ -105,6 +110,8 @@ else:
     }
 
 SESSION_ENGINE: str = "django.contrib.sessions.backends.cache" if CACHE_URL else "django.contrib.sessions.backends.db"
+
+SESSION_COOKIE_NAME: str = f"sessionid_{INSTANCE_NAME}"
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

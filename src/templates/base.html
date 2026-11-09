@@ -5,6 +5,10 @@
     </head>
 
     <body>
+    {# Dev-only banner: shows which worktree this site was served from #}
+    {% if instance_name %}
+    <div style="background:#fd0;padding:2px 8px;font:12px monospace">{{ instance_name }}</div>
+    {% endif %}
     {% block content %}{% endblock content %}
     </body>
 </html>
