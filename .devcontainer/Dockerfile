@@ -9,7 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=True \
     UV_LINK_MODE=copy \
     UV_CACHE_DIR=/home/vscode/.cache/uv \
     PRE_COMMIT_HOME=/home/vscode/.cache/pre-commit \
-    PRE_COMMIT_USE_UV=1
+    PRE_COMMIT_USE_UV=1 \
+    VIRTUAL_ENV=/workspace/.venv \
+    PATH=/workspace/.venv/bin:$PATH
 
 COPY --from=uv --chown=vscode: /uv /uvx /bin/
 
