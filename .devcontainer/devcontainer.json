@@ -37,7 +37,6 @@
   "containerEnv": {
     "DISPLAY": "dummy"
   },
-  "remoteEnv": { "SSH_AUTH_SOCK": "/ssh-agent" },
   "features": {
     "ghcr.io/jsburckhardt/devcontainer-features/just:1": {},
     "ghcr.io/nlstn/devcontainer-features/psql:1": {},
