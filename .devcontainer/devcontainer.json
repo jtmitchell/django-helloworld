@@ -1,13 +1,21 @@
 {
   "name": "Hello World app",
-  "initializeCommand": "test -f .env || cp sample-env.txt .env",
+  "initializeCommand": {
+    "env": "test -f .env || cp sample-env.txt .env",
+    "compose": "test -f .devcontainer/docker-compose.personal.yml || cp .devcontainer/docker-compose.personal.template.yml .devcontainer/docker-compose.personal.yml"
+  },
   "dockerComposeFile": [
-    "docker-compose.yml"
+    "docker-compose.yml",
+    "docker-compose.personal.yml"
   ],
   "workspaceFolder": "/workspace",
   "service": "devcontainer",
   "remoteUser": "vscode",
-  "forwardPorts": [8000, "mailpit:8025", 5678],
+  "forwardPorts": [
+    8000,
+    "mailpit:8025",
+    5678
+  ],
   "portsAttributes": {
     "8000": {
       "label": "Django Dev Server",
@@ -30,7 +38,7 @@
   "postCreateCommand": "uv venv --clear --no-managed-python ${containerWorkspaceFolder}/.venv && just install",
   "postStartCommand": "uv sync --locked && uv run pre-commit gc",
   "mounts": [
-    // "type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
+    "type=bind,source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent",
     // Persist the pre-commit and uv caches across builds
     "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
     "source=uv-cache,target=/home/vscode/.cache/uv,type=volume"
@@ -38,6 +46,7 @@
   "containerEnv": {
     "DISPLAY": "dummy"
   },
+  "remoteEnv": { "SSH_AUTH_SOCK": "/ssh-agent" },
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:4": {
       "moby": false

@@ -17,9 +17,10 @@ As an example, if the project is running on an Azure managed-Kubernetes cluster,
 
 # Branch Status
 
-The branch introduces a [devcontainer](https://containers.dev/) and removes the previous docker-compose workflow.
+The branch adds personalisation to the devcontainer, so developers can add their preferred LLM agents.
 
-Developers are encouraged to work inside the container where the tools and services are provided.
+It also adds some automation commands to help with using [git worktrees](https://git-scm.com/docs/git-worktree)
+and parallel development on a single laptop.
 
 # Developer Onboarding
 
@@ -29,17 +30,20 @@ If they are working inside a cloud editor, the git and devcontainer tools will a
 ## External tools
 - [git](https://git-scm.com/)
 - [devcontainer](https://containers.dev/)
-- ~~[uv](https://docs.astral.sh/uv/)~~ Provided inside the container
-- ~~[just](https://github.com/casey/just)~~ Provided inside the container
 - Their preferred code editor
-- ~~A database~~. Handled by docker compose
-- ~~A cache~~. Handled by docker compose
 - [Docker](https://www.docker.com/) or [podman](https://podman.io/) to build and run containers
-- Cloud management tools
-  - ~~[az](https://learn.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)~~ Provided inside the container
-  - ~~[terraform](https://developer.hashicorp.com/terraform)~~ Provided inside the container
-  - ~~[kubectl](https://kubernetes.io/docs/reference/kubectl/)~~ Provided inside the container
-  - ~~[k9s](https://k9scli.io/)~~ Provided inside the container
+
+## Tools inside the devcontainer
+- [uv](https://docs.astral.sh/uv/)
+- [just](https://github.com/casey/just)
+- Developer's preferred LLM agent harness
+- postgres
+- valkey
+- [az](https://learn.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
+- [terraform](https://developer.hashicorp.com/terraform)
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/)
+- [k9s](https://k9scli.io/)
+
 
 ## Python managed dependancies
 

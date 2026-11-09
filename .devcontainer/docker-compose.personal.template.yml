@@ -1,0 +1,18 @@
+# Personal overrides for devcontainer - safe to modify locally.
+services:
+  devcontainer:
+    #dns:
+    #  - 127.0.0.11
+    #  - 100.100.100.100
+    #  - 8.8.8.8
+    #volumes:
+    #  - ~/.claude:/home/vscode/.claude
+    #
+    # Uncomment the build section below to layer your personal agent on top of
+    # the shared devcontainer image. Create .devcontainer/Dockerfile.personal
+    # and uncomment your chosen agent's RUN block inside it.
+    #
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile.personal
+    {}
