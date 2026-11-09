@@ -34,9 +34,6 @@
   },
   "postCreateCommand": "uv venv --clear --no-managed-python ${containerWorkspaceFolder}/.venv && just install",
   "postStartCommand": "uv sync --locked && uv run pre-commit gc",
-  "mounts": [
-    "type=bind,source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent"
-  ],
   "containerEnv": {
     "DISPLAY": "dummy"
   },
