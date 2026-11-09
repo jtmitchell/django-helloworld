@@ -12,8 +12,7 @@ The project running as a container that we build somewhere else.
 
 As an example, if the project is running on an Azure managed-Kubernetes cluster, the developer may now be expected to use the following tools to manage the app
 - `az` cli to login to the Azure services
-- `terraform` as tool that creates and updates servers and databases in the cloud environment
-- `kubectl` and `k9s` tools for interacting with the Kubernetes cluster
+- `kubectl` for interacting with the Kubernetes cluster
 
 # Branch Status
 
@@ -40,9 +39,7 @@ If they are working inside a cloud editor, the git and devcontainer tools will a
 - postgres
 - valkey
 - [az](https://learn.microsoft.com/en-us/cli/azure/?view=azure-cli-latest)
-- [terraform](https://developer.hashicorp.com/terraform)
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
-- [k9s](https://k9scli.io/)
 
 
 ## Python managed dependancies
