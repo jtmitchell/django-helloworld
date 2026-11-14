@@ -10,11 +10,16 @@ requires-python = ">=3.14"
 dependencies = [
     "django>=6.1.2",
     "django-environ>=0.14.0",
+    "granian[pname,reload,uvloop]>=2.8.7",
+    "psycopg2-binary>=2.9.13",
     "python-dotenv>=1.2.4",
+    "redis>=8.1.0",
+    "tzdata>=2026.6",
+    "whitenoise>=6.12.0",
 ]
 
 [project.scripts]
-# "manage.py" = "helloworld:django_manage"
+"manage.py" = "helloworld:django_manage"
 
 [build-system]
 requires = ["uv_build>=0.13.4,<0.14.0"]
@@ -30,7 +35,7 @@ dev = [
     "pytest>=9.2.0",
     "pytest-django>=4.14.0",
     "ruff>=0.17.3",
-    "ty>=0.0.96",
+    "ty>=0.0.100",
 ]
 
 [tool.uv]

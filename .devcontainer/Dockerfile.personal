@@ -1,0 +1,76 @@
+ARG UV_VERSION=latest
+
+FROM ghcr.io/astral-sh/uv:$UV_VERSION AS uv
+
+FROM mcr.microsoft.com/devcontainers/python:3.14
+
+ENV PYTHONDONTWRITEBYTECODE=True \
+    PYTHONUNBUFFERED=True \
+    UV_LINK_MODE=copy \
+    UV_CACHE_DIR=/home/vscode/.cache/uv \
+    PRE_COMMIT_HOME=/home/vscode/.cache/pre-commit \
+    PRE_COMMIT_USE_UV=1 \
+    VIRTUAL_ENV=/workspace/.venv \
+    PATH=/workspace/.venv/bin:$PATH
+
+COPY --from=uv --chown=vscode: /uv /uvx /bin/
+
+# Pre-create mount points owned by vscode so new named volumes inherit ownership
+RUN mkdir -p /workspace/.venv /home/vscode/.cache/uv /home/vscode/.cache/pre-commit \
+    && chown -R vscode: /workspace/.venv /home/vscode/.cache
+
+# Node.js LTS - required for MCP servers (distributed via npx)
+# and for npm-based coding agents
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs
+
+ENV NPM_CONFIG_PREFIX=/home/vscode/.npm-global
+ENV PATH=/home/vscode/.npm-global/bin:$PATH
+
+# Switch to the devcontainer user to configure npm and install
+USER vscode
+
+# =============================================================================
+# PERSONAL CODING AGENTS - commented out by default
+# Uncomment the agent(s) you want in your personal Containerfile.agent
+# Each agent requires authentication after container creation - see links below
+# Node.js is available via the base devcontainer image
+# =============================================================================
+
+# -- Claude Code (Anthropic) --------------------------------------------------
+# npm install (legacy, useful if you want to pin a version)
+# Do not use sudo with npm - fix permissions via nvm instead if needed
+# RUN npm install -g @anthropic-ai/claude-code
+
+# -- opencode (anomalyco) -----------------------------------------------------
+# Provider-agnostic terminal coding agent (Claude, OpenAI, Gemini, Ollama etc)
+# Auth: run `opencode auth` after container start, or set provider API key env vars
+# Docs: https://opencode.ai/docs
+RUN npm install -g opencode-ai
+
+# -- Codex CLI (OpenAI) -------------------------------------------------------
+# IMPORTANT: package is @openai/codex - the unscoped `codex` is an unrelated package
+# Native installer available as alternative to npm (no Node.js dependency)
+# Auth: requires ChatGPT Plus/Pro/Team/Enterprise, or OPENAI_API_KEY env var
+# Docs: https://developers.openai.com/codex/quickstart
+# RUN curl -fsSL https://chatgpt.com/codex/install.sh | sh
+#
+# setuid lets bwrap create namespaces, bypassing the AppArmor restriction
+RUN npm install -g @openai/codex
+
+# -- pi (Mario Zechner / earendil-works) --------------------------------------
+# Minimal BYOK terminal agent, self-extending via TypeScript extensions
+# Auth: export ANTHROPIC_API_KEY / OPENAI_API_KEY / GEMINI_API_KEY,
+#       or run /login inside pi to use Claude Pro/Max or ChatGPT Plus
+# Docs: https://github.com/earendil-works/pi
+# RUN npm install -g @mariozechner/pi-coding-agent
+
+# -- Openspec (openspec.dev) ----------------------
+# Plugin for multiple agents for creating plans for development.
+RUN npm install -g @fission-ai/openspec@latest
+
+USER root
+
+# Cleanup apt cache after installs
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
