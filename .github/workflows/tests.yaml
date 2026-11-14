@@ -1,0 +1,88 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+---
+name: Run tests
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DJANGO_SETTINGS_MODULE: helloworld.settings
+  SECRET_KEY: aem7ueGh
+  DB_USER: webapp
+  DB_PASSWORD: webapp1234
+  DB_NAME: webapp
+  DATABASE_URL: postgres://webapp:webapp1234@localhost:5432/webapp
+  CACHE_URL: redis://localhost:6379/0
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      db:
+        image: docker.io/library/postgres:18
+        env:
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      cache:
+        image: valkey/valkey:9
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "valkey-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Cache pre-commit environments
+        uses: actions/cache@v5.0.5
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Ruff
+        run: uv run ruff check src/
+
+      - name: Type check
+        run: uv run ty check src/
+
+      - name: Bandit
+        run: uv run pre-commit run bandit --all-files
+
+      - name: Django system check
+        run: uv run manage.py check
+
+      - name: Tests
+        run: uv run pytest src/
