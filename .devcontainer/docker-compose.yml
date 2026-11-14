@@ -32,11 +32,6 @@ services:
 
   devcontainer:
     image: ghcr.io/jtmitchell/django-helloworld/devcontainer:main
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
-      cache_from:
-        - ghcr.io/jtmitchell/django-helloworld/devcontainer:main
     init: true
     volumes:
       - ..:/workspace:cached
