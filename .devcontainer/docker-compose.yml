@@ -1,0 +1,57 @@
+services:
+  # SMTP server to capture outgoing emails
+  mailpit:
+    image: axllent/mailpit:latest
+    environment:
+      - TZ=Pacific/Auckland
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
+
+  cache:
+    image: docker.io/valkey/valkey:9
+    command: valkey-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  postgres:
+    image: docker.io/postgres:18
+    environment:
+      POSTGRES_USER: webapp
+      POSTGRES_PASSWORD: webapp1234
+      POSTGRES_DB: webapp
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  devcontainer:
+    image: ghcr.io/jtmitchell/django-helloworld/devcontainer:main
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      cache_from:
+        - ghcr.io/jtmitchell/django-helloworld/devcontainer:main
+    init: true
+    volumes:
+      - ..:/workspace:cached
+      - venv:/workspace/.venv
+    depends_on:
+      postgres:
+        condition: service_healthy # waits for pg_isready to pass
+      cache:
+        condition: service_started
+      mailpit:
+        condition: service_started
+    command: sleep infinity
+    env_file:
+      - "../.env"
+
+volumes:
+  venv:
+  pgdata:
