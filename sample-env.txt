@@ -1,0 +1,26 @@
+# Django settings
+DJANGO_SETTINGS_MODULE=helloworld.settings
+SECRET_KEY="change-me"
+SITE_TIMEZONE="UTC"
+
+ALLOWED_HOSTS=127.0.0.1
+CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1
+
+DEBUG=True
+
+DATABASE_NAME=webapp
+DATABASE_USER=webapp1234
+DATABASE_PASSWORD=webapp
+DATABASE_HOST=postgres
+DATABASE_PORT=5432
+DATABASE_URL=sqlite:///./db.sqlite3
+# DATABASE_URL=postgres://webapp:webapp1234@postgres:5432/webapp
+
+CACHE_URL=redis://cache:6379/1
+
+SMTP_HOST=mailpit
+SMTP_PORT="1025"
+SMTP_TLS=false
+SMTP_SSL=false
+SMTP_USERNAME=
+SMTP_PASSWORD=
