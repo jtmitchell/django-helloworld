@@ -39,9 +39,7 @@
   },
   "features": {
     "ghcr.io/jsburckhardt/devcontainer-features/just:1": {},
-    "ghcr.io/nlstn/devcontainer-features/psql:1": {},
-    "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {},
-    "ghcr.io/devcontainers/features/azure-cli:1": {}
+    "ghcr.io/nlstn/devcontainer-features/psql:1": {}
   },
   "customizations": {
     "vscode": {
@@ -80,7 +78,7 @@
         "basedpyright.disableLanguageServices": true,
         "python.analysis.typeCheckingMode": "off",
         "python.terminal.useEnvFile": true,
-        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
+        "python.defaultInterpreterPath": "/workspace/.venv/bin/python"
       }
     }
   }
