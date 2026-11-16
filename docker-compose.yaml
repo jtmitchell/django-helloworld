@@ -48,10 +48,13 @@ services:
           - postgres.localhost
 
   migrate:
+    image: ghcr.io/jtmitchell/django-helloworld/helloworld:latest
     build:
       context: .
       dockerfile: Dockerfile
       target: production
+      cache_from:
+        - ghcr.io/jtmitchell/django-helloworld/helloworld:latest
     command: ["python", "manage.py", "migrate", "--noinput"]
     depends_on:
       postgres:
@@ -71,11 +74,14 @@ services:
 
   webapp:
     restart: unless-stopped
+    image: ghcr.io/jtmitchell/django-helloworld/helloworld-dev:latest
     build:
       context: .
       dockerfile: Dockerfile
       # target: production
       target: development
+      cache_from:
+        - ghcr.io/jtmitchell/django-helloworld/helloworld-dev:latest
     read_only: true
     depends_on:
       migrate:
