@@ -3,8 +3,7 @@ name: devcontainer-image
 on:
   push:
     branches:
-      - main
-      - devcontainer
+      - 03_devcontainer
     paths:
       - .devcontainer/Dockerfile
       - .github/workflows/devcontainer-image.yml
@@ -26,6 +25,6 @@ jobs:
           context: .
           file: .devcontainer/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/devcontainer:main
+          tags: ghcr.io/${{ github.repository }}/devcontainer:tools
           cache-from: type=gha
           cache-to: type=gha,mode=max
