@@ -31,12 +31,12 @@ services:
       start_period: 10s
 
   devcontainer:
-    image: ghcr.io/jtmitchell/django-helloworld/devcontainer:main
+    image: ghcr.io/jtmitchell/django-helloworld/devcontainer:tools
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
       cache_from:
-        - ghcr.io/jtmitchell/django-helloworld/devcontainer:main
+        - ghcr.io/jtmitchell/django-helloworld/devcontainer:tools
     init: true
     volumes:
       - "${WORKTREE_DIR:?run the initializeCommand}:/workspace"
