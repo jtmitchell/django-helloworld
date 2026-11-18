@@ -1,15 +1,5 @@
 {
   "features": {
-    "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {
-      "version": "2.0.16",
-      "resolved": "ghcr.io/devcontainers-extra/features/kubectl-asdf@sha256:6cb74689a6ed2a71571b658e792deee75a640a93a77fafe6be1881b1c9759566",
-      "integrity": "sha256:6cb74689a6ed2a71571b658e792deee75a640a93a77fafe6be1881b1c9759566"
-    },
-    "ghcr.io/devcontainers/features/azure-cli:1": {
-      "version": "1.3.0",
-      "resolved": "ghcr.io/devcontainers/features/azure-cli@sha256:d98f1066c077be0fa9d115b718f458bd803e415181b4a96f82a6f5d9f77241ac",
-      "integrity": "sha256:d98f1066c077be0fa9d115b718f458bd803e415181b4a96f82a6f5d9f77241ac"
-    },
     "ghcr.io/jsburckhardt/devcontainer-features/just:1": {
       "version": "1.0.0",
       "resolved": "ghcr.io/jsburckhardt/devcontainer-features/just@sha256:5c90013b36669270be21c69e7d8e5b6148b4b0b34fca9e104a599edf0d7c11af",
