@@ -151,6 +151,20 @@ _dc-down path purge="false":
             | xargs -r docker volume rm
     fi
 
+# Stop the devcontainer for a worktree path without removing it
+[private]
+_dc-stop path:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    path=$(realpath "{{path}}")
+    ids=$(docker ps -aq --filter "label=devcontainer.local_folder=$path")
+    if [ -z "$ids" ]; then
+        echo "No devcontainer found for $path"
+        exit 0
+    fi
+    project=$(docker inspect -f '{{{{index .Config.Labels "com.docker.compose.project"}}' $(echo "$ids" | head -1))
+    docker compose -p "$project" stop
+
 # Start the devcontainer for a worktree (default: this one)
 dc-up path=justfile_directory(): _host-only
     devcontainer up --workspace-folder "{{path}}" </dev/null
@@ -158,6 +172,10 @@ dc-up path=justfile_directory(): _host-only
 # Remove the devcontainer for a worktree, keeping its volumes (default: this one)
 dc-down path=justfile_directory(): _host-only
     just _dc-down "{{path}}" false
+
+# Stop the devcontainer for a worktree without removing it (default: this one)
+dc-stop path=justfile_directory(): _host-only
+    just _dc-stop "{{path}}"
 
 # Start the devcontainers for every worktree, one at a time
 dc-up-all: _host-only
@@ -173,6 +191,14 @@ dc-down-all: _host-only
     set -euo pipefail
     git worktree list --porcelain | sed -n 's/^worktree //p' | while read -r wt; do
         just _dc-down "$wt" false </dev/null
+    done
+
+# Stop the devcontainers for every worktree without removing them
+dc-stop-all: _host-only
+    #!/usr/bin/env bash
+    set -euo pipefail
+    git worktree list --porcelain | sed -n 's/^worktree //p' | while read -r wt; do
+        just _dc-stop "$wt" </dev/null
     done
 
 # Show the worktrees
