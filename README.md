@@ -12,7 +12,19 @@ The view will also increment a counter in a database, for no reason except to ju
 
 # Developer Onboarding
 
-New developers are still expected to handle installation of external tools for their own system.
+- Install external tools
+  - `git`, `uv`, and `just`
+- Checkout the code
+- Install Python and dependancies
+  - `just install`
+- Create a `.env` file based on the sample
+  - `cp sample-env.txt .env`
+- Edit .env as required
+- Apply the database migrations
+  - `just migrate`
+- Start the development server and view the site
+  - `just runserver`
+  - http://localhost:8000/
 
 ## External tools
 - [git](https://git-scm.com/)
