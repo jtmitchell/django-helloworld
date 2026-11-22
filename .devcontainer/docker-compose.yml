@@ -2,6 +2,8 @@ services:
   # SMTP server to capture outgoing emails
   mailpit:
     image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025"
     environment:
       - TZ=Pacific/Auckland
       - MP_SMTP_AUTH_ACCEPT_ANY=1
@@ -41,6 +43,9 @@ services:
     volumes:
       - ..:/workspace:cached
       - venv:/workspace/.venv
+    ports:
+      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:5678:5678"
     depends_on:
       postgres:
         condition: service_healthy # waits for pg_isready to pass
