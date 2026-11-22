@@ -28,14 +28,15 @@ The GitHub workflow now also starts a database and cache, so the tests run again
 
 - Install external tools
   - `git`, `uv`, and `just`
+- Install `docker` with `docker-compose`
 - Checkout the code
 - Install Python and dependancies
   - `just install`
 - Create a `.env` file based on the sample
   - `cp sample-env.txt .env`
 - Edit .env as required
-- Start the development server and view the site
-  - `just runserver`
+- Start the docker-compose services, and view the site
+  - `docker-compose up`
   - http://localhost:8000/
 
 ## External tools
