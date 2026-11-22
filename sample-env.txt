@@ -15,7 +15,7 @@ DATABASE_HOST=postgres
 DATABASE_PORT=5432
 DATABASE_URL=postgres://webapp:webapp1234@postgres.localhost:5432/webapp
 
-CACHE_URL=redis://cache:6379/1
+CACHE_URL=redis://cache.localhost:6379/1
 
 SMTP_HOST=mailpit
 SMTP_PORT="1025"
