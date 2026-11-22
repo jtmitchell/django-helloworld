@@ -3,7 +3,7 @@ DJANGO_SETTINGS_MODULE=helloworld.settings
 SECRET_KEY="change-me"
 SITE_TIMEZONE="UTC"
 
-ALLOWED_HOSTS=127.0.0.1
+ALLOWED_HOSTS=127.0.0.1,localhost
 CSRF_TRUSTED_ORIGINS=http://localhost,http://127.0.0.1
 
 DEBUG=True
