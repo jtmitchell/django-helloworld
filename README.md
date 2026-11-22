@@ -25,6 +25,20 @@ Developers are encouraged to work inside the container where the tools and servi
 New developers are expected to handle installation of external tools for their own system.
 If they are working inside a cloud editor, the git and devcontainer tools will already be provided.
 
+- Install external tools
+  - `git`, `docker`, and `devcontainer`
+- Checkout the code
+- Start the devcontainer
+  - Several editors will offer to start the devcontainer automatically
+  - `devcontainer up --workspace-folder .`
+- Python and dependancies are installed when the devcontainer starts
+- The `.env` file is created if it is missing when the devcontainer starts
+- Edit .env as required
+- Start the development server, and view the site
+  - `just runserver`
+  - `http://localhost:8000/`
+
+
 ## External tools
 - [git](https://git-scm.com/)
 - [devcontainer](https://containers.dev/)
