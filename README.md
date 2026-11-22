@@ -38,7 +38,7 @@ If they are working inside a cloud editor, the git and devcontainer tools will a
 - Start a shell inside the container
   - `devcontainer exec bash`
 - Start the development server, and view the site
-  - `just runserver`
+  - `just runserver 0.0.0.0:8000`
   - `http://localhost:8000/`
 
 

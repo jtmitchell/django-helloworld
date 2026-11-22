@@ -29,7 +29,7 @@ migrate +options="":
     just manage migrate {{options}}
 
 # Start the django development server
-runserver +options="":
+runserver +options="0.0.0.0:8000":
     just manage runserver {{options}}
 
 # Run the Django admin command
