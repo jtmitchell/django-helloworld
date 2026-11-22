@@ -4,6 +4,9 @@
 .codex/
 .pi/
 
+.devcontainer/Dockerfile.personal
+.devcontainer/docker-compose.personal.yml
+
 # debug dump files
 debug/
 
