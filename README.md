@@ -31,9 +31,12 @@ If they are working inside a cloud editor, the git and devcontainer tools will a
 - Start the devcontainer
   - Several editors will offer to start the devcontainer automatically
   - `devcontainer up --workspace-folder .`
-- Python and dependancies are installed when the devcontainer starts
-- The `.env` file is created if it is missing when the devcontainer starts
-- Edit .env as required
+  - The containers will continue running until explicitly stopped
+  - Python and dependancies are installed when the devcontainer starts
+  - The `.env` file is created if it is missing when the devcontainer starts
+  - Edit .env as required
+- Start a shell inside the container
+  - `devcontainer exec bash`
 - Start the development server, and view the site
   - `just runserver`
   - `http://localhost:8000/`
