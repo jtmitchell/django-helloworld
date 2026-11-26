@@ -166,8 +166,8 @@ _dc-stop path:
     docker compose -p "$project" stop
 
 # Start the devcontainer for a worktree (default: this one)
-dc-up path=justfile_directory(): _host-only
-    devcontainer up --workspace-folder "{{path}}" </dev/null
+dc-up path=justfile_directory() +options="": _host-only
+    devcontainer up --workspace-folder "{{path}}" {{options}} </dev/null
 
 # Remove the devcontainer for a worktree, keeping its volumes (default: this one)
 dc-down path=justfile_directory(): _host-only
@@ -178,11 +178,11 @@ dc-stop path=justfile_directory(): _host-only
     just _dc-stop "{{path}}"
 
 # Start the devcontainers for every worktree, one at a time
-dc-up-all: _host-only
+dc-up-all +options="": _host-only
     #!/usr/bin/env bash
     set -euo pipefail
     git worktree list --porcelain | sed -n 's/^worktree //p' | while read -r wt; do
-        devcontainer up --workspace-folder "$wt" </dev/null
+        devcontainer up --workspace-folder "$wt" {{options}} </dev/null
     done
 
 # Remove the devcontainers for every worktree, keeping volumes

@@ -171,6 +171,7 @@ ENV/
 env.bak/
 venv.bak/
 .devcontainer/.env
+.devcontainer/tailscale.env
 
 # Spyder project settings
 .spyderproject

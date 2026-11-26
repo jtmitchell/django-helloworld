@@ -35,3 +35,39 @@ sed -i '/^WORKTREE_DIR=/d;/^GIT_COMMON_DIR=/d' "$env_file"
   echo "WORKTREE_DIR=$PWD"
   echo "GIT_COMMON_DIR=$(git rev-parse --path-format=absolute --git-common-dir)"
 } >> "$env_file"
+
+
+# Check for and setup Tailscale config with Caddy
+key_file="${XDG_CONFIG_HOME:-$HOME/.config}/devcontainer/tailscale.env"
+# --- Opt-in: Tailscale + Caddy -------------------------------------------
+if [ ! -f "$key_file" ] || [ "${DEVCONTAINER_TAILSCALE:-}" = "0" ]; then
+  echo "Tailscale not configured, using the plain stack."
+  exit 0
+fi
+
+# From here on the developer has opted in, so missing pieces are real errors.
+suffix="${TS_TAILNET_SUFFIX:-}"
+if [ -z "$suffix" ]; then
+  if ! command -v tailscale >/dev/null || ! command -v jq >/dev/null; then
+    echo "init.sh: need 'tailscale' and 'jq' on the host, or set TS_TAILNET_SUFFIX" >&2
+    exit 1
+  fi
+  suffix="$(tailscale status --json \
+    | jq -r '.CurrentTailnet.MagicDNSSuffix // .MagicDNSSuffix')"
+fi
+
+# Per-worktree identity, derived from the directory name
+name="$(printf '%s' "$(basename "$PWD")" \
+  | tr '[:upper:]' '[:lower:]' \
+  | tr -cs 'a-z0-9' '-' \
+  | sed 's/^-//; s/-$//' \
+  | cut -c1-40)"
+
+cat >> "$env_file" <<EOF
+TS_HOSTNAME=dev-${name}
+TS_FQDN=dev-${name}.${suffix}
+EOF
+
+install -m 600 "$key_file" .devcontainer/tailscale.env
+# cp .devcontainer/docker-compose.tailscale.yml "$override"
+echo "Tailscale enabled at https://dev-${name}.${suffix}"

@@ -1,6 +1,11 @@
 # Personal overrides for devcontainer - safe to modify locally.
 services:
   devcontainer:
+    # environment:
+    #   - TS_FQDN=${TS_FQDN:?run .devcontainer/initialize.sh}
+    # depends_on:
+    #   tailscale:
+    #     condition: service_started
     #dns:
     #  - 100.100.100.100
     #  - 8.8.8.8
@@ -15,3 +20,49 @@ services:
     #  context: .
     #  dockerfile: Dockerfile.personal
     {}
+
+
+#   tailscale:
+#     image: tailscale/tailscale:latest
+#     env_file:
+#       - tailscale.env
+#     environment:
+#       - TS_HOSTNAME=${TS_HOSTNAME:?run .devcontainer/initialize.sh}
+#       - TS_STATE_DIR=/var/lib/tailscale
+#       - TS_SOCKET=/var/run/tailscale/tailscaled.sock
+#     volumes:
+#       - ts-state:/var/lib/tailscale
+#       - ts-socket:/var/run/tailscale
+#     devices:
+#       - /dev/net/tun:/dev/net/tun
+#     cap_add:
+#       - net_admin
+#     restart: unless-stopped
+
+#   caddy:
+#     image: caddy:2
+#     network_mode: service:tailscale
+#     configs:
+#       - source: caddyfile
+#         target: /etc/caddy/Caddyfile
+#     volumes:
+#       - ts-socket:/var/run/tailscale
+#       - caddy-data:/data
+#     depends_on:
+#       - tailscale
+
+# configs:
+#   caddyfile:
+#     content: |
+#       ${TS_FQDN} {
+#           reverse_proxy 127.0.0.1:${DEVSERVER_PORT}
+#       }
+
+#       ${TS_FQDN}:8025 {
+#           reverse_proxy mailpit:8025
+#       }
+
+# volumes:
+#   ts-state:
+#   ts-socket:
+#   caddy-data:
